@@ -9,6 +9,10 @@ function checkData(data) {
   // Якщо об'єкт не пустий повертаємо дані
   // Інакше створюємо помилку,в якості тексту помилки ми використовуємо рядок "Об'єкт пустий".
   // Якщо виникла помилка, повертаємо її повідомлення.
+  if (Object.keys(data).length === 0) {
+    return "Об'єкт пустий";
+  }
+  return data;
 }
 
 console.log("Завдання: 1 ==============================");
@@ -30,6 +34,11 @@ function parseJson(jsonStr) {
   // Якщо рядок має невірний формат, виникне помилка, яку ми обробляємо у блоку catch.
   // Повертаємо отриманий об'єкт
   // Якщо виникла помилка, повертаємо її повідомлення.
+  try {
+    return JSON.parse(jsonStr);
+  } catch (err) {
+    return err.message;
+  }
 }
 console.log("Завдання: 2 ==============================");
 
@@ -60,6 +69,16 @@ function getAge(age) {
   // Викидаємо помилку
   // Якщо помилки не має повертаємо рядок `Вік користувача: ${age}`
   // Якщо виникла помилка, повертаємо об'єкт з name та message помилки.
+  try {
+    if (age >= 0) {
+      return `Вік користувача: ${age}`;
+    } else {
+      let error = new Error(`Вік не може бути менше 0!`);
+      throw error;
+    }
+  } catch (err) {
+    return err.toString();
+  }
 }
 console.log("Завдання: 3 ==============================");
 
@@ -83,6 +102,19 @@ function getBookById(books, id) {
   // Якщо книга не знайдена, генерується TypeError з повідомленням Книга з ID ${id} не знайдена!.
   // Повертаємо book
   // Повертаємо текстове представлення помилки
+  const obj = books.values();
+  for (const value of obj) {
+    try {
+      if (value.id === id) {
+        return value.title;
+      }
+    } catch (err) {
+      const error = new TypeError(`Книга з ID ${id} не знайдена!`, {
+        cause: err,
+      });
+      return error.toString();
+    }
+  }
 }
 console.log("Завдання: 4 ==============================");
 
@@ -123,6 +155,16 @@ function decodeURIComponentWrapper(encodedString) {
   // Повертаємо декодований рядок
   // Якщо виникла помилка, і ії назва дорівнює URIError повертаємо помилку про неправильний URI формат з повідомленням Помилка декодування URI,
   //  інкше повертаємо текстове представлення помилки
+  try {
+    const decode = decodeURI(encodedString);
+    return decode;
+  } catch (err) {
+    if (err.name === "URIError") {
+      return "Помилка декодування URI";
+    } else {
+      return err.toString();
+    }
+  }
 }
 
 console.log("Завдання: 5 ==============================");
@@ -144,6 +186,21 @@ function findEvenNumber(numbers) {
   // Якщо число знайдено повертаємо його
   // Виводимо текстове представлення помилки.
   // Незалежно від результату, виводимо вихідний масив.
+  let evenNumber;
+  try {
+    for (let value of numbers) {
+      // console.log(value % 2 === 0);
+      if (value % 2 === 0) {
+        evenNumber = value;
+        return evenNumber;
+      }
+    }
+    throw new Error("У масиві немає чисел, що діляться на 2 без остачі!");
+  } catch (err) {
+    return err.toString();
+  } finally {
+    console.log(numbers);
+  }
 }
 
 console.log("Завдання: 6 ==============================");
@@ -192,6 +249,17 @@ function calculateSquareRoot(number) {
   // Перевіряємо, чи число не від'ємне, якщо ні викидуємо помилку про тип недопустимий діапазон з повідомленням Число не повинно бути від'ємним!".
   // Повертаємо корінь квадратний з вхідного значення
   // Повертаємо повідомлення про помилку.
+  try {
+    if (typeof number !== "number") {
+      throw new Error("Аргумент має бути числом!");
+    }
+    if (number < 0) {
+      throw new Error("Число не повинно бути від'ємним!");
+    }
+    return Math.sqrt(number);
+  } catch (err) {
+    return err.message;
+  }
 }
 
 console.log("Завдання: 8 ==============================");
@@ -218,6 +286,17 @@ function processData(data) {
   // Повертаємо рядок "Дані успішно оброблені"
   // Виводимо stack trace помилки
   // Повертаємо повідомлення помилки
+  try {
+    for (const value of data) {
+      if (typeof value !== "number") {
+        let index = data.indexOf(value);
+        throw new Error(`Елемент з індексом ${index} має бути числом!`);
+      }
+    }
+    return "Дані успішно оброблені";
+  } catch (err) {
+    return err.message;
+  }
 }
 
 console.log("Завдання: 9 ==============================");
