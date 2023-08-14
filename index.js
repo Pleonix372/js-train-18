@@ -320,6 +320,12 @@ console.log(processData([1, "two", 3]));
 function evaluateExpression(expression) {
   // Повертаємо результат розрахунку
   // Якщо була виявлена помилка повертаємо помилку при виконанні функції eval
+  try {
+    const result = eval(expression);
+    return result;
+  } catch (error) {
+    return new EvalError(error.message);
+  }
 }
 
 console.log("Завдання: 10 ==============================");
